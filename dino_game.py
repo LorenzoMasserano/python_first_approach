@@ -5,7 +5,6 @@ import select
 import tty
 import termios
 import random
-from warnings import filters
 
 word_resolution = (100,30)
 
