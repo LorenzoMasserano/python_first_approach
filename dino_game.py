@@ -135,8 +135,8 @@ def generate_word(dino_char, dino_char_crouched, cactus_char, floor_char, pigeon
             else:
                 ground += " "
         print(ground)
-        remove_useles_creature()
-        check_game_over()
+    remove_useles_creature()
+    check_game_over()
 
 
 def process_jump():
