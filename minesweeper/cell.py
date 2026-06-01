@@ -6,7 +6,7 @@
 ## Neighbors is simply the number of connection
 ## Flagged identify if the use have flagged this cell
 class Cell:
-    def __init__(self, value, neighbors, node_type, flagged = False):
+    def __init__(self, value: int, neighbors: [], node_type: int, flagged: bool = False):
 
         if not isinstance(value, int):
             raise TypeError(f"The value {value} is not a int")
