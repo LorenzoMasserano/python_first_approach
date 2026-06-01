@@ -1,7 +1,9 @@
 from typing import Tuple
 from cell import Cell 
 import os
+import random
 
+is_game_over = False
 game_board_size = 9
 cover_cell = "■"
 empty_cell = "·"
@@ -12,31 +14,41 @@ mine_explose = "X"
 
 def main():
 
-    clear = lambda: os.system('clear')
-    is_game_over = False
-    cell_list = create_square_game_board(game_board_size, 0)    
-    game_board = connect_cell(cell_list)
-    drow_game_board(game_board)
+    global is_game_over
 
+    mine_inserted = False
+    clear = lambda: os.system('clear')
+    cell_list = create_square_game_board(game_board_size)    
+    game_board = connect_cell(cell_list)
+    drow_game_board(game_board) 
     while not is_game_over:
         cell_selected_x = input("Select a cell with a coordinate x: ") 
-        cell_selected_y = input("Select a cell with a coordinate y: ") 
-        game_board = handle_selection(game_board, (int(cell_selected_x), int(cell_selected_y)))
+        cell_selected_y = input("Select a cell with a coordinate y: ")
+        selected_cell = int(cell_selected_x), int(cell_selected_y)
+        if not mine_inserted: 
+            game_board = distribuite_mine(game_board, 10, selected_cell)
+            mine_inserted = True
+        game_board = handle_selection(game_board, selected_cell)
             
         clear()
         drow_game_board(game_board)
-        
+        check_for_gameover(game_board)
+
+def check_for_gameover(game_board: list[Cell]):
+    
+    global is_game_over
+
+    for cell in game_board:
+        if cell.state == 1 and cell.value == 1:
+            is_game_over = True
+
 def handle_selection(game_board: list[Cell], selected_cell: Tuple) -> list[Cell]:
     for cell in game_board:
-        
         if cell.position[0] == selected_cell[0] and cell.position[1] == selected_cell[1]:
-
-            print(cell.value)
             if cell.state == 0:
-                if cell.value == 0:
-                    cell.state = 1
-                    return game_board
-
+                cell.state = 1
+                return game_board
+                 
     return game_board
 
 def drow_game_board(game_board: list[Cell]):
@@ -50,21 +62,39 @@ def drow_game_board(game_board: list[Cell]):
         if cell.state == 0:
             drow += f" {cover_cell}"
         elif cell.state == 1:
-            drow += f" {empty_cell}"
+            if cell.value == 1:
+                drow += f" {mine_explose}"
+            else:
+                drow += f" {empty_cell}"
         if cell.position[1] == game_board_size:
             drow += "\n"
 
     print(drow)
 
-def create_square_game_board(game_board_size: int, number_of_mine: int) -> list[Cell]:
+def distribuite_mine(game_board: list[Cell], mine_number: int, first_selection: Tuple) -> list[Cell] :
+    
+    remaining_mine = mine_number
+    mine_min_count_down = random.randrange(5)
+
+    for cell in game_board:
+        if cell.position[0] == first_selection[0] and cell.position[1] == first_selection[1]:
+            continue
+        if remaining_mine > 0:
+            if mine_min_count_down == 0:
+                if random.choice([True, False]):
+                    mine_min_count_down = random.randrange(5)
+                    cell.value = 1
+            else:
+                mine_min_count_down -= 1
+
+    return game_board
+
+
+def create_square_game_board(game_board_size: int) -> list[Cell]:
 
     if game_board_size < 3:
         raise IndexError("The game board is too small, must be at least 3")
         
-
-    if number_of_mine > (game_board_size * game_board_size):
-        raise IndexError("Must be exist at least 1 free cell in the game board")
-    
     number_of_total_cell = game_board_size * game_board_size
     cell_list = []
 
