@@ -36,13 +36,13 @@ class Cell:
   
         self.value = value,
         self.neighbors = neighbors
-        self.type = type
-        self.type = type
+        self.node_type = node_type
+        self.position = position
+        self.flagged = flagged
 
     def numberOfMineInNeighboars(self):
         mine_number = 0
         for cell in self.neighbors:
             if cell.value == 1:
                 mine_number += 1
-        return mine_number        
- 
+        return mine_number
