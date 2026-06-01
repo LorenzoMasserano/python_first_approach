@@ -13,16 +13,14 @@ class Cell:
         if not value in (0, 1):
             raise IndexError(f"The value {value} is not 0 or 1")
 
-
         for cell in neighbors:
             if not isinstance(cell, Cell):
                 raise TypeError(f"Neighbors list can only contain a Cell type item not {type(cell)}")
 
-
         if not node_type in (0, 1, 2):
             raise IndexError(f"The value {value} is not 0 or 1 or 2")
         
-        self.value = value,
+        self.value = value
         self.neighbors = neighbors
         self.node_type = node_type
         self.position = position

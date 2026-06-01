@@ -1,18 +1,60 @@
 from typing import Tuple
 from cell import Cell 
+import os
 
-game_board_size = 3
+game_board_size = 9
+cover_cell = "■"
+empty_cell = "·"
+flag = "⚑"
+wrong_flag = "Ø"
+end_game_mine = "☼"
+mine_explose = "X"
 
 def main():
+
+    clear = lambda: os.system('clear')
+    is_game_over = False
     cell_list = create_square_game_board(game_board_size, 0)    
     game_board = connect_cell(cell_list)
-    
+    drow_game_board(game_board)
 
+    while not is_game_over:
+        cell_selected_x = input("Select a cell with a coordinate x: ") 
+        cell_selected_y = input("Select a cell with a coordinate y: ") 
+        game_board = handle_selection(game_board, (int(cell_selected_x), int(cell_selected_y)))
+            
+        clear()
+        drow_game_board(game_board)
+        
+def handle_selection(game_board: list[Cell], selected_cell: Tuple) -> list[Cell]:
     for cell in game_board:
         
-        print(cell.position, f"type: {cell.node_type}")
-        for neighbor in cell.neighbors:
-            print(neighbor.position)
+        if cell.position[0] == selected_cell[0] and cell.position[1] == selected_cell[1]:
+
+            print(cell.value)
+            if cell.state == 0:
+                if cell.value == 0:
+                    cell.state = 1
+                    return game_board
+
+    return game_board
+
+def drow_game_board(game_board: list[Cell]):
+    drow = "  "
+    for i in range(0,game_board_size):
+        drow += f" {i + 1}"
+    drow += "\n"
+    for cell in game_board:
+        if cell.position[1] == 1:
+            drow += f"{cell.position[0]} " 
+        if cell.state == 0:
+            drow += f" {cover_cell}"
+        elif cell.state == 1:
+            drow += f" {empty_cell}"
+        if cell.position[1] == game_board_size:
+            drow += "\n"
+
+    print(drow)
 
 def create_square_game_board(game_board_size: int, number_of_mine: int) -> list[Cell]:
 
@@ -28,7 +70,7 @@ def create_square_game_board(game_board_size: int, number_of_mine: int) -> list[
 
     while len(cell_list) != number_of_total_cell:
         if len(cell_list) < 1:
-            starting_cell = Cell(position = (1, 1), neighbors = [], node_type = 0)
+            starting_cell = Cell(position = (1, 1), neighbors = [], node_type = 0, value = 0)
             cell_list.append(starting_cell)
         else:
             last_cell = cell_list[-1]
@@ -37,20 +79,20 @@ def create_square_game_board(game_board_size: int, number_of_mine: int) -> list[
                 if last_cell.position[1] == game_board_size -1: 
 
                     if last_cell.position[0] in (1, game_board_size): 
-                        cell_list.append(Cell(position = (last_cell.position[0], last_cell.position[1] + 1), node_type = 0, neighbors = []))
+                        cell_list.append(Cell(position = (last_cell.position[0], last_cell.position[1] + 1), node_type = 0, neighbors = [], value = 0))
                     else:
-                        cell_list.append(Cell(position = (last_cell.position[0], last_cell.position[1] + 1), node_type = 1, neighbors = []))
+                        cell_list.append(Cell(position = (last_cell.position[0], last_cell.position[1] + 1), node_type = 1, neighbors = [], value = 0))
                 else:
 
                     if last_cell.position[0] in (1, game_board_size): 
-                        cell_list.append(Cell(position = (last_cell.position[0], last_cell.position[1] + 1), node_type = 1, neighbors = []))
+                        cell_list.append(Cell(position = (last_cell.position[0], last_cell.position[1] + 1), node_type = 1, neighbors = [], value = 0))
                     else:
-                        cell_list.append(Cell(position = (last_cell.position[0], last_cell.position[1] + 1), node_type = 2, neighbors = []))
+                        cell_list.append(Cell(position = (last_cell.position[0], last_cell.position[1] + 1), node_type = 2, neighbors = [], value = 0))
             else:
                 if last_cell.position[0] != game_board_size -1:
-                    cell_list.append(Cell(position = (last_cell.position[0] + 1, 1), node_type = 1, neighbors = []))
+                    cell_list.append(Cell(position = (last_cell.position[0] + 1, 1), node_type = 1, neighbors = [], value = 0))
                 else:
-                    cell_list.append(Cell(position = (last_cell.position[0] + 1, 1), node_type = 0, neighbors = []))
+                    cell_list.append(Cell(position = (last_cell.position[0] + 1, 1), node_type = 0, neighbors = [], value = 0))
     return cell_list
 
 def connect_cell(cell_list: list[Cell]) -> list[Cell]:
