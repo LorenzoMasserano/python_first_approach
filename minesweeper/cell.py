@@ -7,7 +7,7 @@
 ## Flagged identify if the use have flagged this cell
 ## Position is the coordinate of cell in the game board
 class Cell:
-    def __init__(self, position: tuple[int, int], node_type: int, flagged: bool = False, value: int = 0, neighbors: list[Cell] = []):
+    def __init__(self, position: tuple[int, int], node_type: int, neighbors: list['Cell'], flagged: bool = False, value: int = 0):
  
         if not isinstance(position, tuple):
             raise TypeError(f"The value {position} must be an tuple")
@@ -15,7 +15,7 @@ class Cell:
         if not isinstance(value, int):
             raise TypeError(f"The value {value} is not a int")
         
-        if not value is (0, 1):
+        if not value in (0, 1):
             raise IndexError(f"The value {value} is not 0 or 1")
 
         if not isinstance(neighbors, list):
