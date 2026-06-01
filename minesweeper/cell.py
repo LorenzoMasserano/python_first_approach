@@ -31,15 +31,6 @@ class Cell:
         if not node_type in (0, 1, 2):
             raise IndexError(f"The value {value} is not 0 or 1 or 2")
         
-        if node_type == 0 and not len(neighbors) == 3:
-            raise IndexError(f"If the cell is a angle, it most have 3 connection")
-
-        if node_type == 1 and not len(neighbors) == 5:
-            raise IndexError(f"If the cell is a side, it most have 5 connection")
-
-        if node_type == 2 and not len(neighbors) == 8:
-            raise IndexError(f"If the cell is a center, it most have 8 connection")
-
         if not isinstance(flagged, bool):
             raise TypeError("Flagged can olny be bool type")
   
