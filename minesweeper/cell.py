@@ -6,9 +6,15 @@
 ## Neighbors is simply the number of connection
 ## Flagged identify if the use have flagged this cell
 ## Position is the coordinate of cell in the game board
-## State indicate the actual state of cell, it can be cover(0) empty(1)
+## State indicate the actual state of cell, it can be cover(0), empty(1), with_number(2)
 class Cell:
-    def __init__(self, position: tuple[int, int], node_type: int, neighbors: list['Cell'], flagged: bool = False, value: int = 0, state: int = 0):
+    def __init__(self, 
+                 position: tuple[int, int],
+                 node_type: int,
+                 neighbors: list['Cell'], 
+                 flagged: bool = False, 
+                 value: int = 0, 
+                 state: tuple[int, int] = (0, 0)):
  
         if not value in (0, 1):
             raise IndexError(f"The value {value} is not 0 or 1")
@@ -27,7 +33,7 @@ class Cell:
         self.flagged = flagged
         self.state = state
 
-    def numberOfMineInNeighboars(self):
+    def numberOfMineInNeighboars(self) -> int:
         mine_number = 0
         for cell in self.neighbors:
             if cell.value == 1:
