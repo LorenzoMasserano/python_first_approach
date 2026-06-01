@@ -5,8 +5,12 @@
 ## The node_type, helpe the system to comprehend the cell position and the number of connection
 ## Neighbors is simply the number of connection
 ## Flagged identify if the use have flagged this cell
+## Position is the coordinate of cell in the game board
 class Cell:
-    def __init__(self, value: int, neighbors: list['Cell'], node_type: int, flagged: bool = False):
+    def __init__(self, position: tuple[str, int], value: int, neighbors: list[Cell], node_type: int, flagged: bool = False):
+ 
+        if not isinstance(position, tuple):
+            raise TypeError(f"The value {position} must be an tuple")
 
         if not isinstance(value, int):
             raise TypeError(f"The value {value} is not a int")
