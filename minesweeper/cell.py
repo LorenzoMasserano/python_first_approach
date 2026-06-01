@@ -9,31 +9,18 @@
 class Cell:
     def __init__(self, position: tuple[int, int], node_type: int, neighbors: list['Cell'], flagged: bool = False, value: int = 0):
  
-        if not isinstance(position, tuple):
-            raise TypeError(f"The value {position} must be an tuple")
-
-        if not isinstance(value, int):
-            raise TypeError(f"The value {value} is not a int")
-        
         if not value in (0, 1):
             raise IndexError(f"The value {value} is not 0 or 1")
 
-        if not isinstance(neighbors, list):
-            raise TypeError(f"The value {value} it is not a list")
 
         for cell in neighbors:
             if not isinstance(cell, Cell):
                 raise TypeError(f"Neighbors list can only contain a Cell type item not {type(cell)}")
 
-        if not isinstance(node_type, int):
-            raise TypeError(f"The value {value} it is not a int")
 
         if not node_type in (0, 1, 2):
             raise IndexError(f"The value {value} is not 0 or 1 or 2")
         
-        if not isinstance(flagged, bool):
-            raise TypeError("Flagged can olny be bool type")
-  
         self.value = value,
         self.neighbors = neighbors
         self.node_type = node_type

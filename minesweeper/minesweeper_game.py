@@ -16,14 +16,9 @@ def main():
 
 def create_square_game_board(game_board_size: int, number_of_mine: int) -> list[Cell]:
 
-    if not isinstance(game_board_size, int):
-        raise TypeError("The size must be int type")
-    
     if game_board_size < 3:
         raise IndexError("The game board is too small, must be at least 3")
         
-    if not isinstance(number_of_mine, int):
-        raise TypeError("The number of mine must be int type")
 
     if number_of_mine > (game_board_size * game_board_size):
         raise IndexError("Must be exist at least 1 free cell in the game board")
