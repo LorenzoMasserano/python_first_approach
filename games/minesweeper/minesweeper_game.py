@@ -3,7 +3,7 @@ from cell import Cell
 import os
 import random
 
-number_of_mine = 4
+number_of_mine = 9
 number_of_flarg = number_of_mine
 is_game_over = False
 is_game_lose = False
