@@ -3,7 +3,10 @@ from cell import Cell
 import os
 import random
 
+number_of_mine = 4
+number_of_flarg = number_of_mine
 is_game_over = False
+is_game_lose = False
 game_board_size = 9
 cover_cell = "■"
 empty_cell = "·"
@@ -22,29 +25,57 @@ def main():
     game_board = connect_cell(cell_list)
     drow_game_board(game_board) 
     while not is_game_over:
-        cell_selected_x = input("Select a cell with a coordinate x: ") 
-        cell_selected_y = input("Select a cell with a coordinate y: ")
+        cell_selected_x = input("Inset a number to select x, or insert a char 'F' to start insert flarg: ")
+        if cell_selected_x == "F":
+            cell_selected_x = input("Insert number to select x flarg position: ")
+            flag_the_cell = True
+            cell_selected_y = input("Insert number to select y flarg position: ")
+        else:   
+            flag_the_cell = False
+            cell_selected_y = input("Insert a number to select y position: ")
         selected_cell = int(cell_selected_y), int(cell_selected_x)
         if not mine_inserted: 
-            game_board = distribuite_mine(game_board, 10, selected_cell)
+            game_board = distribuite_mine(game_board, number_of_mine, selected_cell)
             mine_inserted = True
-        game_board = handle_selection(game_board, selected_cell)
+        game_board = handle_selection(game_board, selected_cell, flag_the_cell)
             
         clear()
         drow_game_board(game_board)
         check_for_gameover(game_board)
+  
+    if is_game_lose:
+        clear()
+        print("You lose!")
+    else:
+        clear()
+        print("You win!")
+
+    drow_game_board(game_board, is_game_over) 
 
 def check_for_gameover(game_board: list[Cell]):
     
-    global is_game_over
+    global is_game_over, is_game_lose
 
+    cell_explored = 0
     for cell in game_board:
         if cell.state[0] == 1 and cell.value == 1:
             is_game_over = True
+            is_game_lose = True
+        if cell.state[0] == 1 or cell.state[0] == 2 or cell.state[0] == 0 and cell.flagged:
+            cell_explored += 1
+   
+    if cell_explored >= (game_board_size * game_board_size) - number_of_mine:
+        is_game_lose = False
+        is_game_over = True
 
-def handle_selection(game_board: list[Cell], selected_cell: Tuple) -> list[Cell]:
+def handle_selection(game_board: list[Cell], selected_cell: Tuple, flag_the_cell: bool) -> list[Cell]:
+    
     for cell in game_board:
-        if cell.position == selected_cell:
+       if cell.position == selected_cell:
+            if flag_the_cell:
+                cell.flagged = True
+                return game_board
+ 
             if cell.value == 1:
                 cell.state = (1, 0)
             else:   
@@ -67,16 +98,23 @@ def recursive_search_for_mine(cell: Cell):
             worning_mine: int = cell.numberOfMineInNeighboars()
             cell.state = (2, worning_mine)
 
-def drow_game_board(game_board: list[Cell]):
+def drow_game_board(game_board: list[Cell], is_game_over: bool = False):
+
     drow = "  "
+
     for i in range(0,game_board_size):
         drow += f" {i + 1}"
     drow += "\n"
     for cell in game_board:
         if cell.position[1] == 1:
             drow += f"{cell.position[0]} " 
-        if cell.state[0] == 0:
-            drow += f" {cover_cell}"
+        if cell.state[0] == 0 and is_game_over == False:
+            if not cell.flagged:
+                drow += f" {cover_cell}"
+            else:
+                drow += f" {flag}"
+        elif cell.state[0] == 0 and cell.value == 1 and is_game_over == True:
+            drow += f" {end_game_mine}"
         elif cell.state[0] == 1:
             if cell.value == 1:
                 drow += f" {mine_explose}"
