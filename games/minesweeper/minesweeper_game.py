@@ -1,5 +1,5 @@
 from typing import Tuple
-from games.minesweeper.cell import Cell 
+from cell import Cell 
 import os
 import random
 
