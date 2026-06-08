@@ -1,5 +1,5 @@
 from figures.cube import Cube
-from animations.cube_rotation import start_cube_rotation
+from animations.rotation import start_rotation
 from point import CoordinateType
 
 def main():
@@ -30,6 +30,6 @@ def animate_cube():
     axes_choice= list(axes_choice)
     
     cube = Cube(base=10, height=10, z=10,only_border=only_border)
-    start_cube_rotation(cube_instance= cube, speed=speed, rotation_axis= axes_choice)
+    start_rotation(cube_instance= cube, speed=speed, rotation_axis= axes_choice)
 
 main()  

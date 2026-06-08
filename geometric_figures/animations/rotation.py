@@ -2,11 +2,12 @@ import sys
 import time
 import os
 import math
+import select
 from figures.cube import Cube
 from point import CoordinateType, Point
 
-def start_cube_rotation(cube_instance: Cube, speed: float, rotation_axis: list[CoordinateType] = []):
-      
+def start_rotation(cube_instance: Cube, speed: float, rotation_axis: list[CoordinateType] = []):
+
     animate = True
     move_cursor_top_left = lambda: sys.stdout.write("\033[H")
     clear = lambda: os.system('clear')
@@ -15,11 +16,22 @@ def start_cube_rotation(cube_instance: Cube, speed: float, rotation_axis: list[C
     clear()
     while animate: 
         move_cursor_top_left()
-        cube_instance.cube = rotation(cube_instance.cube, rotation_speed, rotation_axis) 
+        animate = set_up_key_observer()
+        cube_instance.cube = set_up_rotation(cube_instance.cube, rotation_speed, rotation_axis) 
         cube_instance.drow_cube()
         time.sleep(0.05)
+
+def set_up_key_observer() -> bool:
+    key = ''
+    if select.select([sys.stdin], [], [], 0) == ([sys.stdin], [], []):
+        key = sys.stdin.read(1)
+
+    if key == "Q":
+        return False 
+
+    return True
         
-def rotation(cube: list[Point], angle_step: float, rotation_axis: list[CoordinateType]) -> list[Point]:
+def set_up_rotation(cube: list[Point], angle_step: float, rotation_axis: list[CoordinateType]) -> list[Point]:
    
     cosine_zero = math.cos(angle_step)
     sine_zero = math.sin(angle_step)
