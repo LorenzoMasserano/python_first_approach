@@ -4,7 +4,7 @@ import os
 import math
 import select
 from figures.cube import Cube
-from point import CoordinateType, Point
+from core.point import CoordinateType, Point
 
 def start_rotation(cube_instance: Cube, speed: float, rotation_axis: list[CoordinateType] = []):
 

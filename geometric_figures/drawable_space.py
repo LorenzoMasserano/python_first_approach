@@ -1,6 +1,6 @@
 from figures.cube import Cube
 from animations.rotation import start_rotation
-from point import CoordinateType
+from core.point import CoordinateType
 
 def main():
     animate_cube()
