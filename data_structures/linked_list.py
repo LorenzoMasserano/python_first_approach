@@ -1,6 +1,6 @@
 from enum import Enum
-from edge import Edge
-from node import Node
+from data_structures.edge import Edge
+from data_structures.node import Node
 
 class NodeType(Enum):
         PREVIOUS = 0
