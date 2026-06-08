@@ -1,4 +1,3 @@
-from os.path import split
 from figures.cube import Cube
 from animations.cube_rotation import start_cube_rotation
 from point import CoordinateType
