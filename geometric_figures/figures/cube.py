@@ -1,6 +1,7 @@
 from core.point import Point
+from core.shape import Shape
 
-class Cube:
+class Cube(Shape):
 
     def __init__(self, base: int, height: int, z: int, only_border: bool = False):
         
@@ -11,8 +12,7 @@ class Cube:
         self.height = height
         self.z = z 
         self.only_border = only_border
-
-        self.cube: list[Point] = self.compose_cube()
+        self.shape = self.compose_cube()
         
     def compose_cube(self) -> list[Point]:
         
@@ -46,7 +46,7 @@ class Cube:
                     )        
         return cube
 
-    def drow_cube(self):
+    def drow(self):
         
         cube_drow = ""
         
@@ -58,7 +58,7 @@ class Cube:
         origin_x = canvas_width // 2
         origin_y = canvas_height // 2
 
-        for point in self.cube:
+        for point in self.shape:
 
             x, y, z = point.coordinate
 

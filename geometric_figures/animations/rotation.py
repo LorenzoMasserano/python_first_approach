@@ -3,10 +3,10 @@ import time
 import os
 import math
 import select
-from figures.cube import Cube
 from core.point import CoordinateType, Point
+from core.shape import Shape
 
-def start_rotation(cube_instance: Cube, speed: float, rotation_axis: list[CoordinateType] = []):
+def start_rotate(shape_instance: Shape, speed: float, rotation_axis: list[CoordinateType] = []):
 
     animate = True
     move_cursor_top_left = lambda: sys.stdout.write("\033[H")
@@ -17,8 +17,8 @@ def start_rotation(cube_instance: Cube, speed: float, rotation_axis: list[Coordi
     while animate: 
         move_cursor_top_left()
         animate = set_up_key_observer()
-        cube_instance.cube = set_up_rotation(cube_instance.cube, rotation_speed, rotation_axis) 
-        cube_instance.drow_cube()
+        shape_instance.shape = set_up_rotation(shape_instance.shape, rotation_speed, rotation_axis) 
+        shape_instance.drow()
         time.sleep(0.05)
 
 def set_up_key_observer() -> bool:
@@ -31,7 +31,7 @@ def set_up_key_observer() -> bool:
 
     return True
         
-def set_up_rotation(cube: list[Point], angle_step: float, rotation_axis: list[CoordinateType]) -> list[Point]:
+def set_up_rotation(shape: list[Point], angle_step: float, rotation_axis: list[CoordinateType]) -> list[Point]:
    
     cosine_zero = math.cos(angle_step)
     sine_zero = math.sin(angle_step)
@@ -40,7 +40,7 @@ def set_up_rotation(cube: list[Point], angle_step: float, rotation_axis: list[Co
 
         if rotation == CoordinateType.Z:
             
-            for point in cube:
+            for point in shape:
                 origin_x = point[CoordinateType.X]
                 origin_y = point[CoordinateType.Y]
                 
@@ -52,7 +52,7 @@ def set_up_rotation(cube: list[Point], angle_step: float, rotation_axis: list[Co
 
         elif rotation == CoordinateType.Y:
 
-            for point in cube:
+            for point in shape:
                 
                 origin_x = point[CoordinateType.X]
                 origin_z = point[CoordinateType.Z]
@@ -65,7 +65,7 @@ def set_up_rotation(cube: list[Point], angle_step: float, rotation_axis: list[Co
 
         else:
             
-            for point in cube:
+            for point in shape:
                  
                 origin_y = point[CoordinateType.Y]
                 origin_z = point[CoordinateType.Z]
@@ -76,4 +76,4 @@ def set_up_rotation(cube: list[Point], angle_step: float, rotation_axis: list[Co
                 point[CoordinateType.Z] = point_z
                 point[CoordinateType.Y] = point_y    
                
-    return cube
+    return shape
