@@ -1,6 +1,7 @@
-from figures.cube import Cube
 from animations.rotation import start_rotate
 from core.point import CoordinateType
+from figures.pyramid import Pyramid
+from figures.cube import Cube
 
 def main():
     animate_cube()
@@ -29,7 +30,7 @@ def animate_cube():
     axes_choice= set(axes_choice)
     axes_choice= list(axes_choice)
     
-    cube = Cube(base=10, height=10, z=10,only_border=only_border)
-    start_rotate(shape_instance= cube, speed=speed, rotation_axis= axes_choice)
+    shape_istance = Pyramid(base=15, height=15, z=15,only_border=only_border)
+    start_rotate(shape_instance= shape_istance, speed=speed, rotation_axis= axes_choice)
 
 main()  

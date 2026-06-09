@@ -4,19 +4,17 @@ from core.shape import Shape
 class Cube(Shape):
 
     def __init__(self, base: int, height: int, z: int, only_border: bool = False):
-        
+
         if not base == height and height == z:
             raise IndexError("Base, height and z must be identical")
 
-        self.base = base
-        self.height = height
-        self.z = z 
         self.only_border = only_border
-        self.shape = self.compose_cube()
+
+        super().__init__(base= base, height= height, z=z)
         
-    def compose_cube(self) -> list[Point]:
+    def compose_shape(self) -> list[Point]:
         
-        cube: list[Point] = []
+        shape: list[Point] = []
         offset_x = self.base / 2
         offset_y = self.height / 2
         offset_z = self.z / 2
@@ -38,37 +36,11 @@ class Cube(Shape):
                     centered_y = float(h - offset_y)
                     centered_z = float(i - offset_z)
 
-                    cube.append(
+                    shape.append(
                         Point(
                             coordinate=(centered_x, centered_y, centered_z),
                             connections=[]
                         )
                     )        
-        return cube
+        return shape
 
-    def drow(self):
-        
-        cube_drow = ""
-        
-        canvas_width = (self.base * 4) + self.z + 20
-        canvas_height = (self.height * 2) + self.z + 10
-
-        canvas = [[" " for _ in range(canvas_width)] for _ in range(canvas_height)]
-        
-        origin_x = canvas_width // 2
-        origin_y = canvas_height // 2
-
-        for point in self.shape:
-
-            x, y, z = point.coordinate
-
-            screen_x = int(round(origin_x + (x*2) + z))
-            screen_y = int(round(origin_y - y - z))
-
-            if 0 <= screen_x < canvas_width and 0 <= screen_y < canvas_height:
-                        canvas[int(screen_y)][int(screen_x)] = "■"
-
-        for row in canvas:
-            cube_drow += "".join(row) + "\n"
-        
-        print(cube_drow)
